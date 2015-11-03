@@ -54,7 +54,7 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
 
 #### DispatcherServlet方式
 
-`
+```
 <servlet>
     <servlet-name>spring</servlet-name>
     <servlet-class>org.pretent.config.spring.zk.zkspring.web.setvlet.ZkDispatcherServlet</servlet-class>
@@ -76,7 +76,7 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
     <servlet-name>spring</servlet-name>
     <url-pattern>/</url-pattern>
 </servlet-mapping>
-`
+```
 
 此种配置类似于`org.springframework.web.servlet.DispatcherServlet`的配置方式，将`DispatcherServlet`类替换成`org.pretent.config.spring.zk.zkspring.web.listener.ZkContextLoaderListener`,指定`contextClass`参数为：`org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext`（默认）,配置`contextConfigLocation`的值为zk:/*.xml,zk:/*.xml，以zk:/开头表示从zookeeper上读取并加载配置，兼容spring本地配置（写成classpath，将从本地classpath中加载配置），配置skServers参数指定zookeeper服务器地址,多个地址间使用,分割（192.168.0.1：2181,192.168.0.2：2181,...）
 

@@ -1,7 +1,7 @@
 # zkspring 使用说明
 
 ## 简述
-zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动时直接从zookeeper上读取加载配置，并且实时监听zookeeper上配置，一旦配置有所改变，下载最新配置并在补重启web服务的情况下重新加载新配置。
+zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动时直接从zookeeper上读取加载配置，并且实时监听zookeeper上配置，一旦配置有所改变，下载最新配置并在不重启web服务的情况下重启spring context 加载应用新配置。
 
 ## 目的
 设计之处是为了解决多个节点运行同一spring web服务，每次修改配置需要在多个节点上修改的繁琐问题。
@@ -50,11 +50,11 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
     </listener-class>
 </listener>
 ```
-次种配置类似于org.springframework.web.context.ContextLoaderListener的配置方式，将ContextLoaderListener类替换成org.pretent.config.spring.zk.zkspring.web.listener.ZkContextLoaderListener,指定contextClass参数为：org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext,配置contextConfigLocation的值为zk:/*.xml,zk:/*.xml，以zk:/开头表示从zookeeper上读取并加载配置，兼容spring本地配置（写成classpath，将从本地classpath中加载配置）、
+此种配置类似于`org.springframework.web.context.ContextLoaderListener`的配置方式，将`ContextLoaderListener`类替换成`org.pretent.config.spring.zk.zkspring.web.listener.ZkContextLoaderListener`,指定`contextClass`参数为：`org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext`,配置`contextConfigLocation`的值为zk:/*.xml,zk:/*.xml，以zk:/开头表示从zookeeper上读取并加载配置，兼容spring本地配置（写成classpath，将从本地classpath中加载配置）、
 
 #### DispatcherServlet方式
 
-```
+`
 <servlet>
     <servlet-name>spring</servlet-name>
     <servlet-class>org.pretent.config.spring.zk.zkspring.web.setvlet.ZkDispatcherServlet</servlet-class>
@@ -76,9 +76,9 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
     <servlet-name>spring</servlet-name>
     <url-pattern>/</url-pattern>
 </servlet-mapping>
-```
+`
 
-次种配置类似于org.springframework.web.servlet.DispatcherServlet的配置方式，将DispatcherServlet类替换成org.pretent.config.spring.zk.zkspring.web.listener.ZkContextLoaderListener,指定contextClass参数为：org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext（默认）,配置contextConfigLocation的值为zk:/*.xml,zk:/*.xml，以zk:/开头表示从zookeeper上读取并加载配置，兼容spring本地配置（写成classpath，将从本地classpath中加载配置），配置skServers参数指定zookeeper服务器地址,多个地址间使用,分割（192.168.0.1：2181,192.168.0.2：2181,...）
+此种配置类似于`org.springframework.web.servlet.DispatcherServlet`的配置方式，将`DispatcherServlet`类替换成`org.pretent.config.spring.zk.zkspring.web.listener.ZkContextLoaderListener`,指定`contextClass`参数为：`org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext`（默认）,配置`contextConfigLocation`的值为zk:/*.xml,zk:/*.xml，以zk:/开头表示从zookeeper上读取并加载配置，兼容spring本地配置（写成classpath，将从本地classpath中加载配置），配置skServers参数指定zookeeper服务器地址,多个地址间使用,分割（192.168.0.1：2181,192.168.0.2：2181,...）
 
 
 

@@ -1,9 +1,10 @@
 # zkspring 使用说明
 
 ## 简述
-zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，
+zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动时直接从zookeeper上读取加载配置，并且实时监听zookeeper上配置，一旦配置有所改变，下载最新配置并在补重启web服务的情况下重新加载新配置。
 
 ## 目的
+设计之处是为了解决多个节点运行同一spring web服务，每次修改配置需要在多个节点上修改的繁琐问题。
 
 ## 快速开始
 目前支持加载web.xml方式启动spring的两种方式：
@@ -24,6 +25,56 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，
 	<artifactId>zkspring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 </dependency>
+```
+
+### 配置项目web.xml
+
+#### ContextLoaderListener方式
+
+```
+<context-param>
+    <param-name>contextClass</param-name>
+    <param-value>org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext</param-value>
+</context-param>
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>zk:/config/applicationContext.xml,zk:/config/app.xml</param-value>
+</context-param>
+<context-param>
+    <param-name>skServers</param-name>
+    <param-value>127.0.0.1:2181</param-value>
+</context-param>
+<listener>
+    <listener-class>
+        org.pretent.config.spring.zk.zkspring.web.listener.ZkContextLoaderListener
+    </listener-class>
+</listener>
+```
+
+#### DispatcherServlet方式
+
+```
+<servlet>
+    <servlet-name>spring</servlet-name>
+    <servlet-class>org.pretent.config.spring.zk.zkspring.web.setvlet.ZkDispatcherServlet</servlet-class>
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>zk:/config/applicationContext.xml,zk:/config/app.xml</param-value>
+    </init-param>
+    <init-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext</param-value>
+    </init-param>
+	<init-param>
+		<param-name>skServers</param-name>
+		<param-value>127.0.0.1:2181</param-value>
+	</init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>spring</servlet-name>
+    <url-pattern>/</url-pattern>
+</servlet-mapping>
 ```
 
 

@@ -1,5 +1,12 @@
 # zkspring 使用说明
 
+## [目录]
+
+* 简述
+* 目的
+* 快速开始
+* 其他
+
 ### 简述
 zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动时直接从zookeeper上读取加载配置，并且实时监听zookeeper上配置，一旦配置有所改变，下载最新配置并在不重启web服务的情况下重启spring context 加载应用新配置。
 

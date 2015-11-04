@@ -85,6 +85,13 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
 
 #### 编译依赖
 ```
+<properties>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<spring.version>3.0.3.RELEASE</spring.version>
+	<zkclient.version>0.1</zkclient.version>
+	<artifact.scope>compile</artifact.scope>
+</properties>
+
 <dependency>
 	<groupId>commons-lang</groupId>
 	<artifactId>commons-lang</artifactId>

@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.pretent.config.spring.zk.zkspring.ZkWacher;
+import org.pretent.config.spring.zk.zkspring.util.ApplicationContextUtils;
 import org.pretent.config.spring.zk.zkspring.util.StringArrayUtils;
 import org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext;
 import org.springframework.web.context.ContextLoaderListener;
@@ -29,7 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
         <param-value>zk:/config/applicationContext.xml,zk:/config/app.xml</param-value>
     </context-param>
     <context-param>
-        <param-name>skServers</param-name>
+        <param-name>servers</param-name>
         <param-value>127.0.0.1:2181</param-value>
     </context-param>
     <listener>
@@ -43,8 +44,7 @@ import org.springframework.web.context.WebApplicationContext;
  *
  */
 public class ZkContextLoaderListener extends ContextLoaderListener {
-
-
+	
 	private static final Logger logger = Logger.getLogger(ZkContextLoaderListener.class);
 
 	/**
@@ -57,6 +57,9 @@ public class ZkContextLoaderListener extends ContextLoaderListener {
 	@Override
 	public WebApplicationContext initWebApplicationContext(ServletContext servletContext) {
 		logger.debug("--------->开始初始化Web Context");
+		String servers = servletContext.getInitParameter("servers");
+		ApplicationContextUtils.setServers(servers);
+		logger.debug("--------->zkservers:"+servers);
 		ZkXmlWebApplicationContext wac = (ZkXmlWebApplicationContext) super.initWebApplicationContext(servletContext);
 		// 关闭zk连接
 		wac.getZkClient().close();
@@ -64,8 +67,7 @@ public class ZkContextLoaderListener extends ContextLoaderListener {
 		logger.debug("--------->启动zk监听数据变化");
 		// 启动zk监听数据变化
 		String[] nodes = StringArrayUtils.removeString(servletContext.getInitParameter(CONFIG_LOCATION_PARAM).split(","), "zk:");
-		new ZkWacher(ZkXmlWebApplicationContext.getZkServers(), nodes).listen();
+		new ZkWacher(servers, nodes).listen();
 		return wac;
 	}
-
 }

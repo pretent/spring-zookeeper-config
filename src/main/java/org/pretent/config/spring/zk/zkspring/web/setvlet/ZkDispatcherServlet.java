@@ -1,6 +1,9 @@
 package org.pretent.config.spring.zk.zkspring.web.setvlet;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.pretent.config.spring.zk.zkspring.ZkWacher;
+import org.pretent.config.spring.zk.zkspring.util.ApplicationContextUtils;
 import org.pretent.config.spring.zk.zkspring.util.StringArrayUtils;
 import org.pretent.config.spring.zk.zkspring.web.context.ZkApplicationContextUtils;
 import org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext;
@@ -27,7 +30,7 @@ import org.springframework.web.servlet.DispatcherServlet;
             <param-value>org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext</param-value>
         </init-param>
 		<init-param>
-			<param-name>skServers</param-name>
+			<param-name>servers</param-name>
 			<param-value>127.0.0.1:2181</param-value>
 		</init-param>
         <load-on-startup>1</load-on-startup>
@@ -42,6 +45,12 @@ import org.springframework.web.servlet.DispatcherServlet;
  */
 public class ZkDispatcherServlet extends DispatcherServlet {
 
+	private static Logger logger = Logger.getLogger(ZkDispatcherServlet.class);
+	
+	static {
+		logger.setLevel(Level.DEBUG);
+	}
+	
 	private Class<?> calzz = ZkXmlWebApplicationContext.class;
 
 	/**
@@ -65,6 +74,9 @@ public class ZkDispatcherServlet extends DispatcherServlet {
 	@Override
 	protected WebApplicationContext initWebApplicationContext() {
 		logger.debug("--------->开始初始化Web Context");
+		String servers = getServletConfig().getInitParameter("servers");
+		ApplicationContextUtils.setServers(servers);
+		logger.debug("--------->zkservers:"+servers);
 		ZkXmlWebApplicationContext wac = (ZkXmlWebApplicationContext) super.initWebApplicationContext();
 		ZkApplicationContextUtils.setContext(wac);
 		// 关闭zk连接
@@ -73,7 +85,7 @@ public class ZkDispatcherServlet extends DispatcherServlet {
 		logger.debug("--------->启动zk监听数据变化");
 		// 启动zk监听数据变化
 		String[] nodes = StringArrayUtils.removeString(getInitParameter("contextConfigLocation").split(","), "zk:");
-		new ZkWacher(ZkXmlWebApplicationContext.getZkServers(), nodes).listen();
+		new ZkWacher(ApplicationContextUtils.getServers(), nodes).listen();
 		return wac;
 	}
 	

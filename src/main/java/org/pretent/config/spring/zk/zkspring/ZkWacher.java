@@ -154,4 +154,8 @@ public class ZkWacher implements IZkDataListener {
 	public void handleDataDeleted(String zknode) throws Exception {
 		logger.warn("szookeeper " + zknode + " 数据被删除...");
 	}
+
+	public String getServers() {
+		return servers;
+	}
 }

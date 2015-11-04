@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
  *
  */
 public class ApplicationContextUtils {
-
+	
 	// 当前运行的spring context
 	private static ApplicationContext context;
 
@@ -20,6 +20,16 @@ public class ApplicationContextUtils {
 
 	// 用来保存xml文件的名称
 	private static String[] xmls;
+	
+	private static String servers = null;
+	
+	public static String getServers() {
+		return servers;
+	}
+
+	public static void setServers(String servers) {
+		ApplicationContextUtils.servers = servers;
+	}
 
 	public static ApplicationContext getApplicationContext() {
 		return context;

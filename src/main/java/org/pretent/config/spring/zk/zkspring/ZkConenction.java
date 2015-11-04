@@ -13,7 +13,7 @@ public class ZkConenction {
 		// 连接zookeeper服务器
 		ZkClient zkClient = new ZkClient("127.0.0.1:2181");
 		// 读取本地spring配置
-		String filePath = "/Users/user/app.xml";
+		String filePath = "c:/applicationContext.xml";
 		// zookeeper保存spring配置的znode
 		String zkPath = ZOOKEEPER_NODE_PATH + "/app.xml";
 		ZkObject object = new ZkObject();

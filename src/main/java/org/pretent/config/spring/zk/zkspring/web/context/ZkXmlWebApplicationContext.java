@@ -2,13 +2,11 @@ package org.pretent.config.spring.zk.zkspring.web.context;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.log4j.Logger;
 import org.pretent.config.spring.zk.zkspring.ZkObject;
+import org.pretent.config.spring.zk.zkspring.util.ApplicationContextUtils;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.context.support.XmlWebApplicationContext;
@@ -28,32 +26,8 @@ public class ZkXmlWebApplicationContext extends XmlWebApplicationContext {
 	 */
 	private Resource[] resources = null;
 
-	/**
-	 * zk.properties的配置，zk 连接属性等
-	 */
-	private final static Properties properties = new Properties();
-
-	static {
-		ResourceBundle bundle = ResourceBundle.getBundle("zk");
-		Set<String> keys = bundle.keySet();
-		System.out.println("zk.properties:");
-		for (String key : keys) {
-			properties.put(key, bundle.getObject(key));
-			System.out.println(bundle.getString(key));
-		}
-	}
-
-	public static String getProperty(String key) {
-		return properties.getProperty(key);
-	}
-	
-	public static String getZkServers() {
-		return properties.getProperty("zk.servers");
-	}
-
 	// 从zk上读取配置信息数据
-	private ZkClient zkClient = new ZkClient(
-			properties.getProperty("zk.servers"));
+	private ZkClient zkClient = null;
 
 	public Resource[] getResources() {
 		return resources;
@@ -97,6 +71,9 @@ public class ZkXmlWebApplicationContext extends XmlWebApplicationContext {
 		Resource[] rses = null;
 		try {
 			System.out.println(location.substring(3));
+			if (zkClient == null) {
+				zkClient = new ZkClient(ApplicationContextUtils.getServers());
+			}
 			ZkObject obj = zkClient.readData(location.substring(3));
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			Logger.getLogger(this.getClass()).debug(obj.getData());

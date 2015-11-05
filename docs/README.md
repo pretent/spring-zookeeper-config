@@ -2,7 +2,7 @@
 
 ## [目录]
 
-* [简述](^Overview)
+* [简述](Overview)
 * 目的
 * 快速开始
 * 其他
@@ -38,7 +38,7 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
 
 ##### ContextLoaderListener方式
 
-```
+```java
 <context-param>
     <param-name>contextClass</param-name>
     <param-value>org.pretent.config.spring.zk.zkspring.web.context.ZkXmlWebApplicationContext</param-value>
@@ -62,7 +62,7 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
 
 ##### DispatcherServlet方式
 
-```
+```java
 <servlet>
     <servlet-name>spring</servlet-name>
     <servlet-class>org.pretent.config.spring.zk.zkspring.web.setvlet.ZkDispatcherServlet</servlet-class>

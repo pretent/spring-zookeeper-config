@@ -26,7 +26,7 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
 #### 下载依赖
 
 下载安装zkspring依赖：[zkspring.jar](../bin/zkspring-0.0.1-SNAPSHOT.jar)
-```
+```java
 <dependency>
 	<groupId>org.pretent.config.spring.zk</groupId>
 	<artifactId>zkspring</artifactId>
@@ -91,7 +91,7 @@ zkspring是一个可以让zookeeper来管理spring的*.xml配置文件，启动�
 ### 其他
 
 #### 编译依赖
-```
+```java
 <properties>
 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<spring.version>3.0.3.RELEASE</spring.version>
